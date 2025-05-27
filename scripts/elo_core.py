@@ -23,9 +23,9 @@ from typing import List, Tuple
 # CONSTANTS (edit here → everywhere)
 # ──────────────────────────────
 RATING_INIT: float  = 1500.0
-K_FACTOR: float     = 20.0
+K_FACTOR: float     = 10.0
 TOLERANCE: float    = 1e-3
-TAU_GAP_DAYS: float = 365   # np.inf → no time decay
+TAU_GAP_DAYS: float = 365 * 2   # np.inf → no time decay
 
 WIFE_RANGE: Tuple[float,float] = (96.0, 99.7)
 
@@ -122,30 +122,52 @@ def outcome_from_scores(rA: float, rB: float, wA: float, wB: float,
         return 0.0
     return 0.5
 
-
 def run_elo(matches: pd.DataFrame, *,
             rating_init: float = RATING_INIT,
             k: float = K_FACTOR,
             tau_gap_days: float = TAU_GAP_DAYS,
             tol: float = TOLERANCE) -> pd.Series:
-    """Compute final Elo ratings for a single skill‑set."""
-    rating = defaultdict(lambda: rating_init)
+    """
+    Compute final Elo ratings for a single skill-set.
+
+    For every *new* personal-best score **id_A** (player A):
+
+      • Compare A against each opponent B (id_B) using A’s current rating.
+      • Accumulate ΔR_A from all comparisons.
+      • Update each opponent B right away.
+      • When all matches for this id_A are done, apply the summed ΔR_A once.
+
+    """
+    rating: dict[str, float] = defaultdict(lambda: rating_init)
     tau = np.float64(tau_gap_days)
 
-    for row in matches.itertuples(index=False):
-        pA, rA, wA, tA = row.player_A, row.rate_A, row.wife_A, row.datetime_A
-        pB, rB, wB, tB = row.player_B, row.rate_B, row.wife_B, row.datetime_B
+    # group rows belonging to the same new score (id_A)
+    for id_A, grp in matches.groupby("id_A", sort=False):
+        
+        row0 = grp.iloc[0]
+        pA, RA0 = row0.player_A, rating[row0.player_A]
+        delta_A_sum = 0.0
 
-        gap = abs((tA - tB).days)
-        k_eff = k if np.isinf(tau) else k * np.exp(-gap / tau)
+        for row in grp.itertuples(index=False):
+            pB, rA, rB = row.player_B, row.rate_A, row.rate_B
+            wA, wB     = row.wife_A,   row.wife_B
+            tA, tB     = row.datetime_A, row.datetime_B
 
-        sA = outcome_from_scores(rA, rB, wA, wB, tol)
-        sB = 1.0 - sA
+            RB = rating[pB]
+            gap = abs((tA - tB).days)
+            k_eff = k if np.isinf(tau) else k * np.exp(-gap / tau)
 
-        RA, RB = rating[pA], rating[pB]
-        expA   = 1.0 / (1.0 + 10.0 ** ((RB - RA) / 400.0))
+            sA = outcome_from_scores(rA, rB, wA, wB, tol)
+            sB = 1.0 - sA
+            expA = 1.0 / (1.0 + 10.0 ** ((RB - RA0) / 400.0))
 
-        rating[pA] = RA + k_eff * (sA - expA)
-        rating[pB] = RB + k_eff * (sB - (1.0 - expA))
+            # accumulate A's delta but do NOT apply yet
+            delta_A_sum += k_eff * (sA - expA)
+
+            # update B immediately (safe because each B appears once per grp)
+            rating[pB] = RB + k_eff * (sB - (1.0 - expA))
+
+        # apply A's combined update once
+        rating[pA] = RA0 + delta_A_sum
 
     return pd.Series(rating, name="elo").sort_values(ascending=False)

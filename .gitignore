@@ -1,2 +1,3 @@
 output/scores/*
 scripts/run_elo_history.py
+scripts/__pycache__
