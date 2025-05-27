@@ -129,7 +129,7 @@ Download scores from the EtternaOnline:
 ```bash
 uv run scripts/scrapper.py
 ```
-Or from (releases)[https://github.com/MaidOfFire/etterna-elo-ranking/releases]
+Or from [releases](https://github.com/MaidOfFire/etterna-elo-ranking/releases)
 
 Run Elo rating script:
 ```bash
