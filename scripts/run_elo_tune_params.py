@@ -20,8 +20,8 @@ from elo_core import (                 # shared helpers & constants
 # ──────────────────────────────
 SCORES_DIR = Path("output/scores")
 
-K_GRID   = [1,2,5,7,10,15]
-TAU_GRID = [180, 365, 365*2, np.inf]            # days; np.inf → no decay
+K_GRID   = [1,2,5,7,10,12,15]
+TAU_GRID = [365, 365*2, 365*3, np.inf]            # days; np.inf → no decay
 
 FRAC              = 0.10    # fraction of eligible rows into test
 RNG_SEED          = 1

@@ -64,7 +64,10 @@ _Last updated: May 21, 2025_
 | Voezux           |      1724 |     1734 |         1612 |         1775 |         1662 |        1514 |
 | malicieux        |      1721 |     1645 |         1756 |         1709 |         1699 |        1632 |
 
-Full table (271 player) [here](/output/elo_dtw_ord_skillsets.md).
+Full table (271 player) [here](/output/elo_dtw_ord_skillsets.md). Peak rating table [here](/output/elo_dtw_ord_peak_skillsets.md). 
+
+Note that because the player pool was much smaller in earlier years, Elo inflation occurs quickly.
+Ratings achieved in different eras are therefore generally not comparable.
 
 ---
 

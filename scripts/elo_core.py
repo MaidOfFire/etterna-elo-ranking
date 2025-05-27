@@ -122,13 +122,16 @@ def outcome_from_scores(rA: float, rB: float, wA: float, wB: float,
         return 0.0
     return 0.5
 
-def run_elo(matches: pd.DataFrame, *,
-            rating_init: float = RATING_INIT,
-            k: float = K_FACTOR,
-            tau_gap_days: float = TAU_GAP_DAYS,
-            tol: float = TOLERANCE) -> pd.Series:
+def run_elo(
+    matches: pd.DataFrame,
+    *,
+    rating_init: float = RATING_INIT,
+    k:          float  = K_FACTOR,
+    tau_gap_days: float = TAU_GAP_DAYS,
+    tol:        float  = TOLERANCE,
+) -> pd.DataFrame:
     """
-    Compute final Elo ratings for a single skill-set.
+    Compute final and peak Elo ratings for a given series of matches.
 
     For every *new* personal-best score **id_A** (player A):
 
@@ -137,20 +140,26 @@ def run_elo(matches: pd.DataFrame, *,
       • Update each opponent B right away.
       • When all matches for this id_A are done, apply the summed ΔR_A once.
 
+    Returns
+    -------
+    pd.DataFrame
+        index = player,
+        columns = ["elo", "peak"]
+        where “elo” is the rating after the final match and “peak” is the
+        highest value that player reached at any point in the simulation.
     """
     rating: dict[str, float] = defaultdict(lambda: rating_init)
+    peak:   dict[str, float] = defaultdict(lambda: rating_init)
     tau = np.float64(tau_gap_days)
 
-    # group rows belonging to the same new score (id_A)
     for id_A, grp in matches.groupby("id_A", sort=False):
-        
         row0 = grp.iloc[0]
         pA, RA0 = row0.player_A, rating[row0.player_A]
         delta_A_sum = 0.0
 
         for row in grp.itertuples(index=False):
             pB, rA, rB = row.player_B, row.rate_A, row.rate_B
-            wA, wB     = row.wife_A,   row.wife_B
+            wA, wB     = row.wife_A, row.wife_B
             tA, tB     = row.datetime_A, row.datetime_B
 
             RB = rating[pB]
@@ -161,13 +170,18 @@ def run_elo(matches: pd.DataFrame, *,
             sB = 1.0 - sA
             expA = 1.0 / (1.0 + 10.0 ** ((RB - RA0) / 400.0))
 
-            # accumulate A's delta but do NOT apply yet
+            # accumulate A's delta
             delta_A_sum += k_eff * (sA - expA)
 
-            # update B immediately (safe because each B appears once per grp)
+            # update B immediately
             rating[pB] = RB + k_eff * (sB - (1.0 - expA))
+            peak[pB]   = max(peak[pB], rating[pB])
 
-        # apply A's combined update once
+        # batch-apply A's combined update once
         rating[pA] = RA0 + delta_A_sum
+        peak[pA]   = max(peak[pA], rating[pA])
 
-    return pd.Series(rating, name="elo").sort_values(ascending=False)
+    df = (pd.DataFrame({"elo": rating})
+            .join(pd.Series(peak, name="peak"))
+            .sort_values("elo", ascending=False))
+    return df
