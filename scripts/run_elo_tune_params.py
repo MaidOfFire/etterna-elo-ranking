@@ -10,30 +10,29 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import log_loss
 
-from elo_core import (                 # shared helpers & constants
+from elo_core import (
     SKILLSETS, load_scores, build_matches_for_skillset,
     outcome_from_scores, RATING_INIT, TOLERANCE,
 )
 
 # ──────────────────────────────
-# SEARCH SPACE & SETTINGS
+# SETTINGS
 # ──────────────────────────────
 SCORES_DIR = Path("output/scores")
 
-K_GRID   = [1,2,5,7,10,12,15]
-TAU_GRID = [365, 365*2, 365*3, np.inf]            # days; np.inf → no decay
+K_GRID   = [10]
+TAU_GRID = [365*3, 365 * 4, 365*4.5, 365*5, np.inf]
 
-FRAC              = 0.10    # fraction of eligible rows into test
-RNG_SEED          = 1
-MIN_CAL_MATCHES   = 200     # min prior rows to be eligible for test
+FRAC            = 0.10
+RNG_SEED        = 1
+MIN_CAL_MATCHES = 200
 
 # ──────────────────────────────
-def brier_score(y: np.ndarray, p: np.ndarray) -> float:
+def brier_score(y, p):
     return float(np.mean((p - y) ** 2))
 
 
-def evaluate_random_holdout(
-    matches:  pd.DataFrame,
+def evaluate_random_holdout(    matches:  pd.DataFrame,
     frac:     float,
     rng:      np.random.Generator,
     k:        float,
@@ -42,31 +41,31 @@ def evaluate_random_holdout(
     """
     Chronological simulation with batch update for id_A.
 
-    • All rows having the same `id_A` are processed as one batch:
+    • All rows having the same id_A are processed as one batch:
         – Player A's rating is frozen for the batch.
         – ΔR_A from train rows is accumulated and applied once after batch.
         – Each opponent B is updated immediately (train rows only).
 
     • A row is eligible for the random test split iff BOTH players have at least
-      `MIN_CAL_MATCHES` prior matches in this skill-set.  Eligible rows are
-      sent to test with probability `frac`; train rows update ratings.
+      MIN_CAL_MATCHES prior matches in this skill-set.  Eligible rows are
+      sent to test with probability frac; train rows update ratings.
     """
-    ratings: dict[str, float] = defaultdict(lambda: RATING_INIT)
-    played:  dict[str, int]   = defaultdict(int)        # prior match counts
+    ratings = defaultdict(lambda: RATING_INIT)
+    played  = defaultdict(int)  # prior match counts
     tau = np.float64(tau_days)
 
     probs, outcomes = [], []
 
     # rows already chronological → group by id_A in appearance order
     for id_A, grp in matches.groupby("id_A", sort=False):
-        row0 = grp.iloc[0]
-        pA   = row0.player_A
-        RA0  = ratings[pA]                 # freeze A for this batch
-        delta_A_sum = 0.0                  # accumulated update for A
+        pA      = grp.iloc[0].player_A
+        RA0     = ratings[pA]  # freeze A for this batch
+        delta_A = 0.0 # accumulated update for A
 
+        
         for row in grp.itertuples(index=False):
             pB, rA, rB = row.player_B, row.rate_A, row.rate_B
-            wA, wB     = row.wife_A,    row.wife_B
+            wA, wB     = row.wife_A,   row.wife_B
             tA, tB     = row.datetime_A, row.datetime_B
 
             # eligibility & random test flag
@@ -74,49 +73,44 @@ def evaluate_random_holdout(
                         played[pB] >= MIN_CAL_MATCHES)
             is_test  = eligible and (rng.random() < frac)
 
-            RB = ratings[pB]
-            expA = 1.0 / (1.0 + 10.0 ** ((RB - RA0) / 400.0))
-            sA  = outcome_from_scores(rA, rB, wA, wB, TOLERANCE)
-            sB  = 1.0 - sA
+            RB   = ratings[pB]
+            expA = 1 / (1 + 10 ** ((RB - RA0) / 400))
+            sA   = outcome_from_scores(rA, rB, wA, wB, TOLERANCE)
+            sB   = 1 - sA
 
             if is_test:
                 probs.append(expA)
                 outcomes.append(sA)
             else:
-                gap = abs((tA - tB).days)
+                gap   = abs((tA - tB).days)
                 k_eff = k if np.isinf(tau) else k * np.exp(-gap / tau)
-
-                # accumulate A’s change, update B immediately
-                delta_A_sum += k_eff * (sA - expA)
-                ratings[pB] = RB + k_eff * (sB - (1.0 - expA))
-
+                delta_A        += k_eff * (sA - expA)
+                ratings[pB]     = RB + k_eff * (sB - (1 - expA))
+            
             # count this match for future eligibility
             played[pA] += 1
             played[pB] += 1
 
-        # apply A’s combined delta once
-        ratings[pA] = RA0 + delta_A_sum
+        ratings[pA] = RA0 + delta_A
 
     return np.asarray(probs), np.asarray(outcomes)
 
 
-def score_params(data: pd.DataFrame, k: float, tau: float):
+def score_params(match_cache, k, tau):
     rng = np.random.default_rng(RNG_SEED)
-    tot_ll, tot_brier, tot_n = 0.0, 0.0, 0
+    tot_ll = tot_brier = tot_n = 0
 
-    for sk in SKILLSETS:
-        matches = build_matches_for_skillset(data, sk)
+    for sk, matches in match_cache.items():
         if matches.empty:
             continue
-
         p, y = evaluate_random_holdout(matches, FRAC, rng, k, tau)
-        if len(y) == 0:
+        if y.size == 0:
             continue
 
-        draws  = y == 0.5
+        draws  = (y == 0.5)
         brier  = brier_score(y, p)
-        ll     = log_loss(y[~draws], p[~draws]) if (~draws).sum() else np.nan
-        n      = len(y)
+        ll     = log_loss(y[~draws], p[~draws]) if (~draws).any() else np.nan
+        n      = y.size
 
         tot_n     += n
         tot_brier += brier * n
@@ -131,9 +125,15 @@ def score_params(data: pd.DataFrame, k: float, tau: float):
 def main():
     data = load_scores(SCORES_DIR)
 
+    # ---------- build matches once per skill-set -------------------- #
+    match_cache = {
+        sk: build_matches_for_skillset(data, sk) for sk in SKILLSETS
+    }
+    # ---------------------------------------------------------------- #
+
     results = []
     for k, tau in itertools.product(K_GRID, TAU_GRID):
-        ll, br = score_params(data, k, tau)
+        ll, br = score_params(match_cache, k, tau)
         tau_lbl = "inf" if np.isinf(tau) else int(tau)
         results.append({"K": k, "tau": tau_lbl, "log_loss": ll, "brier": br})
         print(f"K={k:>2}, τ={tau_lbl:>4} → log_loss={ll:.4f}  brier={br:.4f}")

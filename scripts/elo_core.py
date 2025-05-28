@@ -25,7 +25,7 @@ from typing import List, Tuple
 RATING_INIT: float  = 1500.0
 K_FACTOR: float     = 10.0
 TOLERANCE: float    = 1e-3
-TAU_GAP_DAYS: float = 365 * 2   # np.inf → no time decay
+TAU_GAP_DAYS: float = 365 * 4   # np.inf → no time decay
 
 WIFE_RANGE: Tuple[float,float] = (96.0, 99.7)
 
