@@ -83,20 +83,21 @@ For each chart and skillset (e.g., `stream`, `jumpstream`, `handstream` (defined
 
 All pairs from the same new personal best are processed as a single batch: player's rating update is accumulated and applied once after all comparisons.
 
-The outcome of a match is a continuous score \(S_A \in [0,1]\) for player A
+The outcome of a match is a continuous score $S_A \in [0,1]$ for player A
 computed from two differences:
 
-\[
+```math
 x_1 = \log\!\Bigl(\tfrac{\text{rate}_A}{\text{rate}_B}\Bigr), 
 \qquad
 x_2 = \text{WIFE}_A - \text{WIFE}_B
-\]
+```
 
 These inputs feed a logistic curve:
 
 ```math
 S_A = \sigma\!\bigl(\alpha \, x_1 + \beta \, x_2\bigr),
 \quad \sigma(z)=\frac{1}{1 + e^{-z}}
+```
 
 where $\alpha$ and $\beta$ are tunable parameters, determining equivalence of different (rate, wife) pairs.
 
