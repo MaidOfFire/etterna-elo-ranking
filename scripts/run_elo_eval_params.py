@@ -26,6 +26,7 @@ from elo_core import (
     load_scores,
     build_matches_for_skillset,
     outcome_from_scores,
+    outcome_dynamic,
     RATING_INIT,
     TOLERANCE,
 )
@@ -41,13 +42,23 @@ MIN_CAL_MATCHES   = 200      # min prior matches per player to be test-eligible
 
 # Override core K / τ if you want different evaluation settings
 K_FOR_EVAL   = 10.0
-TAU_FOR_EVAL = 365 * 2       # days; np.inf → no decay
+TAU_FOR_EVAL = 365 * 4       # days; np.inf → no decay
+RATE_DIFF_SCALE_FOR_EVAL = 100.0
+WIFE_DIFF_SCALE_FOR_EVAL = 1.5
 
 # ──────────────────────────────
 # Helper scoring functions
 # ──────────────────────────────
 def brier_score(y: np.ndarray, p: np.ndarray) -> float:
     return float(np.mean((p - y) ** 2))
+
+
+def cross_entropy(y: np.ndarray, p: np.ndarray) -> float:
+    eps = 1e-15                       
+    p   = np.clip(p, eps, 1 - eps)
+    return float(np.mean(-(y * np.log(p) + (1 - y) * np.log(1 - p))))
+# -------------------------------------------------------------------
+
 
 
 def evaluate_random_holdout(matches: pd.DataFrame,
@@ -81,11 +92,12 @@ def evaluate_random_holdout(matches: pd.DataFrame,
 
             RB   = ratings[pB]
             expA = 1.0 / (1.0 + 10.0 ** ((RB - RA0) / 400.0))
-            sA   = outcome_from_scores(rA, rB, wA, wB, TOLERANCE)
+            sA = outcome_dynamic(rA, rB, wA, wB, RATE_DIFF_SCALE_FOR_EVAL, WIFE_DIFF_SCALE_FOR_EVAL)
             sB   = 1.0 - sA
 
             if is_test:
                 probs.append(expA)
+                #outcomes.append(1.0 if sA > 0.5 else 0.0)
                 outcomes.append(sA)
             else:
                 gap = abs((tA - tB).days)
@@ -119,8 +131,8 @@ def compute_metrics(all_data: pd.DataFrame) -> pd.DataFrame:
         draws = (y == 0.5)
         brier = brier_score(y, p)
         if (~draws).sum():
-            ll  = log_loss(y[~draws], p[~draws])
-            acc = accuracy_score(y[~draws], p[~draws] > 0.5)
+            ll  = cross_entropy(y[~draws], p[~draws]) #log_loss(y[~draws], p[~draws])
+            #acc = accuracy_score(y[~draws], p[~draws] > 0.5)
         else:
             ll, acc = np.nan, np.nan
 
@@ -129,7 +141,7 @@ def compute_metrics(all_data: pd.DataFrame) -> pd.DataFrame:
             "n_test": len(y),
             "log_loss": ll,
             "brier": brier,
-            "accuracy": acc,
+            #"accuracy": acc,
         })
 
     if not rows:
@@ -147,7 +159,7 @@ def compute_metrics(all_data: pd.DataFrame) -> pd.DataFrame:
         "n_test": weights.sum(),
         "log_loss": wavg(df["log_loss"]),
         "brier":    np.average(df["brier"], weights=weights),
-        "accuracy": wavg(df["accuracy"]),
+        #"accuracy": wavg(df["accuracy"]),
     }
 
     return (pd.concat([pd.DataFrame([overall]), df], ignore_index=True)

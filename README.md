@@ -13,57 +13,57 @@ _Last updated: May 21, 2025_
 
 |                  |   overall |   stream |   jumpstream |   handstream |   chordjacks |   technical |
 |:-----------------|----------:|---------:|-------------:|-------------:|-------------:|------------:|
-| Saragi           |      2206 |     2233 |         2161 |         2223 |         2144 |        1951 |
-| maya             |      2129 |     2153 |         2113 |         2121 |         1953 |        1967 |
-| AnMaO            |      2121 |     2210 |         2077 |         2011 |         1788 |        2076 |
-| jja              |      2101 |     2018 |         2180 |         2105 |         1923 |        1804 |
-| clerpy           |      2066 |     2137 |         2054 |         1953 |         1949 |        2008 |
-| puyihari         |      2032 |     2206 |         1967 |         1915 |         1918 |        1922 |
-| muelsyse         |      1995 |     1733 |         2050 |         1977 |         1902 |        1959 |
-| Devplayzz        |      1995 |     1953 |         2052 |         1708 |         1514 |        1979 |
-| SillyFangirl     |      1987 |     1789 |         2038 |         1963 |         1960 |        1820 |
-| waterquality     |      1934 |     1846 |         2045 |         1910 |         1716 |        1839 |
-| theman234tonk    |      1909 |     1893 |         1883 |         1860 |         1565 |        1952 |
-| vaydex           |      1901 |     1657 |         1886 |         1623 |         2162 |        1495 |
-| Monheim          |      1901 |     1670 |         1806 |         1745 |         2128 |        1769 |
-| skadi            |      1897 |     1804 |         1862 |         1943 |         1885 |        1664 |
-| yumaTV           |      1889 |     1913 |         1954 |         1583 |         1799 |        1694 |
-| Noraa            |      1885 |     1839 |         2016 |         1727 |         1742 |        1799 |
-| YumaOs           |      1883 |     1754 |         1792 |         1917 |         1940 |        1539 |
-| paocompaoepaa    |      1863 |     2045 |         1568 |         1878 |         1429 |        1667 |
-| wLeyo            |      1849 |     1789 |         1908 |         1851 |         1732 |        1724 |
-| TristanJacob9    |      1849 |     1850 |         1552 |         1811 |         1874 |        1822 |
-| Bistulex         |      1843 |     1817 |         1551 |         1970 |         1636 |        1740 |
-| snoverpk         |      1842 |     1870 |         1818 |         1838 |         1590 |        1807 |
-| DanTDM           |      1839 |     2003 |         1698 |         1672 |         1637 |        1816 |
-| Kyuui            |      1839 |     1721 |         1865 |         1642 |         1860 |        1792 |
-| selrrrrr         |      1838 |     1652 |         2029 |         1648 |         1833 |        1621 |
-| Meatloaf         |      1827 |     1904 |         1788 |         1788 |         1473 |        1603 |
-| Guilherme        |      1823 |     1774 |         1722 |         1747 |         1837 |        1857 |
-| Trescendence     |      1816 |     1647 |         1927 |         1624 |         1820 |        1703 |
-| Delusion         |      1804 |     1700 |         1644 |         1933 |         1551 |        1778 |
-| lifillled        |      1796 |     1795 |         1813 |         1781 |         1543 |        1575 |
-| Thiago           |      1795 |     1692 |         1815 |         1826 |         1743 |        1643 |
-| Nico777playz     |      1790 |     1787 |         1825 |         1598 |         1758 |        1700 |
-| na2304           |      1790 |     1693 |         1598 |         1620 |         1936 |        1740 |
-| Shadow           |      1788 |     1860 |         1748 |         1685 |         1601 |        1755 |
-| sim0             |      1782 |     1609 |         1817 |         1808 |         1691 |        1721 |
-| gongorirel       |      1776 |     1537 |         1875 |         1915 |         1498 |        1463 |
-| 23Marzo          |      1772 |     1663 |         1968 |            0 |         1563 |        1685 |
-| SOYNEBUV2        |      1767 |     1754 |         1718 |         1830 |         1537 |        1453 |
-| Abyss            |      1762 |     1622 |         1918 |         1676 |         1691 |        1629 |
-| Vulpsi           |      1759 |     1547 |         1680 |         1572 |         1880 |        1719 |
-| stracciatella    |      1759 |     1791 |         1747 |         1738 |         1690 |        1697 |
-| zoobin4          |      1753 |     1783 |         1625 |         1547 |         1510 |        1851 |
-| marilyy          |      1752 |     1665 |         1840 |         1586 |         1452 |        1751 |
-| Tanmanguy7       |      1745 |     1805 |         1743 |         1592 |         1688 |        1584 |
-| almond           |      1742 |     1895 |         1521 |         1598 |         1643 |        1688 |
-| Dystire          |      1742 |     1898 |         1587 |         1654 |         1499 |        1673 |
-| malicieux        |      1741 |     1661 |         1751 |         1760 |         1711 |        1658 |
-| OmegaFade        |      1736 |     1825 |         1698 |         1685 |         1450 |        1605 |
-| LeMarcinho       |      1735 |     1744 |         1674 |         1767 |         1597 |        1694 |
-| Methanol         |      1732 |     1588 |         1731 |         1806 |         1641 |        1659 |
-| Voezux           |      1731 |     1745 |         1609 |         1772 |         1675 |        1516 |
+| Saragi           |      2484 |     2544 |         2437 |         2440 |         2467 |        2035 |
+| puyihari         |      2396 |     2485 |         2314 |         2389 |         2264 |        2129 |
+| YumaOs           |      2297 |     2293 |         2313 |         2287 |         2001 |        1906 |
+| AnMaO            |      2258 |     2363 |         2219 |         2191 |         1773 |        2084 |
+| jja              |      2252 |     2258 |         2278 |         2219 |         2023 |        2032 |
+| maya             |      2245 |     2354 |         2128 |         2253 |         1948 |        2068 |
+| gongorirel       |      2226 |     2125 |         2280 |         2274 |         1521 |        1710 |
+| marilyy          |      2174 |     2286 |         2011 |         2066 |         1566 |        2169 |
+| selrrrrr         |      2168 |     1886 |         2283 |         2210 |         2010 |        1926 |
+| Devplayzz        |      2153 |     2155 |         2136 |         1962 |         1564 |        2168 |
+| clerpy           |      2128 |     2187 |         2128 |         2070 |         2000 |        2039 |
+| SillyFangirl     |      2119 |     2020 |         2175 |         2113 |         2063 |        2068 |
+| paocompaoepaa    |      2080 |     2240 |         1748 |         2063 |         1612 |        1937 |
+| waterquality     |      2044 |     1924 |         2153 |         2056 |         1770 |        1923 |
+| na2304           |      2034 |     2027 |         1640 |         1876 |         2104 |        1971 |
+| almond           |      2030 |     2127 |         1931 |         2030 |         1730 |        1802 |
+| Bistulex         |      2025 |     2084 |         1982 |         2009 |         1835 |        1864 |
+| Nico777playz     |      2004 |     1978 |         1973 |         1861 |         2060 |        1912 |
+| Abyss            |      2002 |     1885 |         2095 |         2027 |         1698 |        1664 |
+| Kyuui            |      1994 |     1934 |         1929 |         1654 |         2049 |        1999 |
+| vibong           |      1974 |     1973 |         1883 |         1779 |         2065 |        1793 |
+| COmp             |      1973 |     1966 |         2066 |         1886 |         1764 |        1743 |
+| muelsyse         |      1966 |     1861 |         2119 |         1917 |         1836 |        1828 |
+| DanTDM           |      1961 |     2009 |         1799 |         1885 |         1843 |        1988 |
+| 23Marzo          |      1961 |     1946 |         1991 |         1945 |         1619 |        1650 |
+| Delusion         |      1952 |     1918 |         1915 |         2022 |         1662 |        1834 |
+| Kuruche          |      1949 |     2062 |         1929 |         1856 |         1619 |        1803 |
+| Noraa            |      1945 |     1909 |         2058 |         1803 |         1805 |        1870 |
+| skadi            |      1933 |     1909 |         1943 |         1948 |         1867 |        1754 |
+| TristanJacob9    |      1931 |     1947 |         1744 |         1828 |         1904 |        1941 |
+| googlekub455     |      1931 |     2070 |         1871 |         1639 |         1607 |        1851 |
+| vaydex           |      1918 |     1440 |         1872 |         1656 |         2226 |        1505 |
+| Voezux           |      1916 |     2066 |         1772 |         1910 |         1665 |        1584 |
+| DeltaEquals84    |      1911 |     2099 |         1704 |         1770 |         1416 |        1864 |
+| Meatloaf         |      1909 |     2123 |         1786 |         1817 |         1485 |        1706 |
+| snoverpk         |      1899 |     1920 |         1910 |         1863 |         1665 |        1866 |
+| Trescendence     |      1897 |     1880 |         1873 |         1796 |         1826 |        1936 |
+| malicieux        |      1894 |     1844 |         1864 |         1974 |         1591 |        1670 |
+| SOYNEBUV2        |      1884 |     1869 |         1810 |         1973 |         1704 |        1614 |
+| yumaTV           |      1883 |     1882 |         1987 |         1760 |         1780 |        1668 |
+| Dystire          |      1882 |     1946 |         1773 |         1841 |         1514 |        1861 |
+| Guilherme        |      1880 |     1751 |         1582 |         1795 |         1953 |        1893 |
+| Monheim          |      1874 |     1621 |         1693 |         1738 |         2145 |        1739 |
+| hsod             |      1873 |     1645 |         1958 |         1869 |         1792 |        1768 |
+| Vanstav          |      1856 |     2216 |         1583 |         1535 |         1547 |        1769 |
+| Shadow           |      1854 |     1965 |         1749 |         1701 |         1599 |        1848 |
+| breadles         |      1850 |     1861 |         1516 |         1652 |         1860 |        1830 |
+| theman234tonk    |      1847 |     1857 |         1885 |         1790 |         1561 |        1799 |
+| p6yb             |      1847 |     1793 |         2045 |         1545 |         1703 |        1627 |
+| Tevelkin         |      1845 |     1714 |         1826 |         1798 |         1484 |        1911 |
+| Wateh            |      1845 |     1825 |         1719 |         1881 |         1595 |        1829 |
 
 Full table (271 player) [here](/output/elo_dtw_ord_skillsets.md). Peak rating table [here](/output/elo_dtw_ord_peak_skillsets.md). 
 
@@ -83,10 +83,22 @@ For each chart and skillset (e.g., `stream`, `jumpstream`, `handstream` (defined
 
 All pairs from the same new personal best are processed as a single batch: player's rating update is accumulated and applied once after all comparisons.
 
-The outcome of the match is given as follows:
+The outcome of a match is a continuous score \(S_A \in [0,1]\) for player A
+computed from two differences:
 
-1. **Higher rate** wins.
-2. If the rate is the same, the higher **WIFE accuracy %** wins.
+\[
+x_1 = \log\!\Bigl(\tfrac{\text{rate}_A}{\text{rate}_B}\Bigr), 
+\qquad
+x_2 = \text{WIFE}_A - \text{WIFE}_B
+\]
+
+These inputs feed a logistic curve:
+
+```math
+S_A = \sigma\!\bigl(\alpha \, x_1 + \beta \, x_2\bigr),
+\quad \sigma(z)=\frac{1}{1 + e^{-z}}
+
+where $\alpha$ and $\beta$ are tunable parameters, determining equivalence of different (rate, wife) pairs.
 
 ## Elo Update formula:
 
@@ -110,7 +122,7 @@ K_{\text{eff}} = K \cdot e^{-\Delta / \tau}
   - $\Delta$ is the absolute difference in days between the two matched scores.
   - $\tau$ (**tau parameter**) controls how quickly the weight decays with time (measured in days). Larger values of $\tau$ mean slower decay; set $\tau = \infty$ to disable time decay entirely.
 
-- $S_A$ is the actual score from the match (1 if win, 0.5 if draw, 0 if loss).
+- $S_A$ is the actual score from the match.
 - $E_A$ is the expected score, calculated as:
   
 ```math

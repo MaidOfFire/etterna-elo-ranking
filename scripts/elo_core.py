@@ -25,9 +25,12 @@ from typing import List, Tuple
 RATING_INIT: float  = 1500.0
 K_FACTOR: float     = 10.0
 TOLERANCE: float    = 1e-3
-TAU_GAP_DAYS: float = 365 * 4   # np.inf → no time decay
+TAU_GAP_DAYS: float = 4*365   # np.inf → no time decay
 
-WIFE_RANGE: Tuple[float,float] = (96.0, 99.7)
+WIFE_DIFF_SCALE = 1.5
+RATE_DIFF_SCALE = 100.0
+
+WIFE_RANGE: Tuple[float,float] = (89.0, 99.0)
 
 SKILLSETS: List[str] = [
     "stream", "jumpstream", "handstream",
@@ -109,6 +112,27 @@ def build_matches_for_skillset(df: pd.DataFrame, sk: str) -> pd.DataFrame:
 # Core Elo helpers
 # ──────────────────────────────
 
+def outcome_dynamic(
+    rA: float, rB: float,
+    wA: float, wB: float,
+    alpha: float = RATE_DIFF_SCALE,     # weight for log(rate ratio)
+    beta:  float = WIFE_DIFF_SCALE      # weight for WIFE diff
+) -> float:
+    """
+    Return a value in (0,1) giving the probability‐like ‘score’ for player A.
+
+        z = alpha * log(rate_A / rate_B) + beta * (wife_A - wife_B)
+        S_A = 1 / (1 + exp(-z))
+
+    • Symmetric: swapping A/B makes z → –z →  S_A ↔ 1–S_A
+    • If rates and WIFEs equal → z = 0 → 0.5 (draw).
+    """
+    # avoid divide-by-zero: rate values are positive by construction
+    z = alpha * np.log(rA / rB) + beta * (wA - wB)
+
+    return 1.0 / (1.0 + np.exp(-z))
+
+
 def outcome_from_scores(rA: float, rB: float, wA: float, wB: float,
                         tol: float = TOLERANCE) -> float:
     """Return 1 if A beats B, 0 if B beats A, 0.5 for draw."""
@@ -166,7 +190,8 @@ def run_elo(
             gap = abs((tA - tB).days)
             k_eff = k if np.isinf(tau) else k * np.exp(-gap / tau)
 
-            sA = outcome_from_scores(rA, rB, wA, wB, tol)
+            #sA = outcome_from_scores(rA, rB, wA, wB, tol)
+            sA = outcome_dynamic(rA, rB, wA, wB)
             sB = 1.0 - sA
             expA = 1.0 / (1.0 + 10.0 ** ((RB - RA0) / 400.0))
 

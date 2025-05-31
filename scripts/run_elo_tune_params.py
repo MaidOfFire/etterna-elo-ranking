@@ -12,7 +12,7 @@ from sklearn.metrics import log_loss
 
 from elo_core import (
     SKILLSETS, load_scores, build_matches_for_skillset,
-    outcome_from_scores, RATING_INIT, TOLERANCE,
+    outcome_from_scores,outcome_dynamic, RATING_INIT, TOLERANCE,
 )
 
 # ──────────────────────────────
@@ -21,9 +21,12 @@ from elo_core import (
 SCORES_DIR = Path("output/scores")
 
 K_GRID   = [10]
-TAU_GRID = [365*3, 365 * 4, 365*4.5, 365*5, np.inf]
+TAU_GRID = [365*4,365*5,np.inf]
+RATE_DIFF_SCALE_GRID = [100]
+WIFE_DIFF_SCALE_GRID = [1.5]
 
-FRAC            = 0.10
+
+FRAC            = 0.05
 RNG_SEED        = 1
 MIN_CAL_MATCHES = 200
 
@@ -31,12 +34,20 @@ MIN_CAL_MATCHES = 200
 def brier_score(y, p):
     return float(np.mean((p - y) ** 2))
 
+def cross_entropy(y: np.ndarray, p: np.ndarray) -> float:
+    eps = 1e-15                       
+    p   = np.clip(p, eps, 1 - eps)
+    return float(np.mean(-(y * np.log(p) + (1 - y) * np.log(1 - p))))
+# -------------------------------------------------------------------
+
 
 def evaluate_random_holdout(    matches:  pd.DataFrame,
     frac:     float,
     rng:      np.random.Generator,
     k:        float,
     tau_days: float,
+    w_scale:  float,
+    r_scale:  float
 ) -> tuple[np.ndarray, np.ndarray]:
     """
     Chronological simulation with batch update for id_A.
@@ -75,12 +86,14 @@ def evaluate_random_holdout(    matches:  pd.DataFrame,
 
             RB   = ratings[pB]
             expA = 1 / (1 + 10 ** ((RB - RA0) / 400))
-            sA   = outcome_from_scores(rA, rB, wA, wB, TOLERANCE)
+            #sA   = outcome_from_scores(rA, rB, wA, wB, TOLERANCE)
+            sA   = outcome_dynamic(rA, rB, wA, wB, r_scale, w_scale)
             sB   = 1 - sA
 
             if is_test:
                 probs.append(expA)
                 outcomes.append(sA)
+                #outcomes.append(1.0 if sA > 0.5 else 0.0)
             else:
                 gap   = abs((tA - tB).days)
                 k_eff = k if np.isinf(tau) else k * np.exp(-gap / tau)
@@ -96,20 +109,21 @@ def evaluate_random_holdout(    matches:  pd.DataFrame,
     return np.asarray(probs), np.asarray(outcomes)
 
 
-def score_params(match_cache, k, tau):
+def score_params(match_cache, k, tau,w_scale, r_scale):
     rng = np.random.default_rng(RNG_SEED)
     tot_ll = tot_brier = tot_n = 0
 
     for sk, matches in match_cache.items():
         if matches.empty:
             continue
-        p, y = evaluate_random_holdout(matches, FRAC, rng, k, tau)
+        p, y = evaluate_random_holdout(matches, FRAC, rng, k, tau, w_scale, r_scale)
         if y.size == 0:
             continue
 
         draws  = (y == 0.5)
         brier  = brier_score(y, p)
-        ll     = log_loss(y[~draws], p[~draws]) if (~draws).any() else np.nan
+        ce     = cross_entropy(y[~draws], p[~draws]) if (~draws).any() else np.nan
+        ll     = log_loss(np.round(y[~draws]), p[~draws]) if (~draws).any() else np.nan
         n      = y.size
 
         tot_n     += n
@@ -132,16 +146,16 @@ def main():
     # ---------------------------------------------------------------- #
 
     results = []
-    for k, tau in itertools.product(K_GRID, TAU_GRID):
-        ll, br = score_params(match_cache, k, tau)
+    for k, tau, w_scale, r_scale in itertools.product(K_GRID, TAU_GRID, WIFE_DIFF_SCALE_GRID, RATE_DIFF_SCALE_GRID):
+        ll, br = score_params(match_cache, k, tau, w_scale, r_scale)
         tau_lbl = "inf" if np.isinf(tau) else int(tau)
-        results.append({"K": k, "tau": tau_lbl, "log_loss": ll, "brier": br})
-        print(f"K={k:>2}, τ={tau_lbl:>4} → log_loss={ll:.4f}  brier={br:.4f}")
+        results.append({"K": k, "tau": tau_lbl, "wife_scale": w_scale, "rate_scale": r_scale, "log_loss": ll, "brier": br})
+        print(f"K={k:>2}, τ={tau_lbl:>4}, w_s={w_scale}, r_s={r_scale} → log_loss={ll:.4f}  brier={br:.4f}")
 
     results.sort(key=lambda d: d["log_loss"])
     best = results[0]
     print("\n===== Best parameters (by log-loss) =====")
-    print(f"K = {best['K']}, τ = {best['tau']}  ⇒  "
+    print(f"K = {best['K']}, τ = {best['tau']}, w_scale = {best['wife_scale']}, r_scale = {best['rate_scale']}  ⇒  "
           f"log_loss = {best['log_loss']:.4f},  brier = {best['brier']:.4f}")
 
 
