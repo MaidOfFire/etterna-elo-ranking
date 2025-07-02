@@ -17,7 +17,7 @@ from pathlib import Path
 from collections import defaultdict
 import numpy as np
 import pandas as pd
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 # ──────────────────────────────
 # CONSTANTS (edit here → everywhere)
@@ -153,7 +153,9 @@ def run_elo(
     k:          float  = K_FACTOR,
     tau_gap_days: float = TAU_GAP_DAYS,
     tol:        float  = TOLERANCE,
-) -> pd.DataFrame:
+    return_history: bool = False,
+    
+) -> Union[pd.DataFrame, Tuple[pd.DataFrame, pd.DataFrame]]:
     """
     Compute final and peak Elo ratings for a given series of matches.
 
@@ -174,6 +176,7 @@ def run_elo(
     """
     rating: dict[str, float] = defaultdict(lambda: rating_init)
     peak:   dict[str, float] = defaultdict(lambda: rating_init)
+    history:  list[dict]     = []          
     tau = np.float64(tau_gap_days)
 
     for id_A, grp in matches.groupby("id_A", sort=False):
@@ -205,8 +208,20 @@ def run_elo(
         # batch-apply A's combined update once
         rating[pA] = RA0 + delta_A_sum
         peak[pA]   = max(peak[pA], rating[pA])
+        history.append(dict(score_id=id_A,player=pA,elo_at_score=rating[pA],datetime=row0.datetime_A,))
 
-    df = (pd.DataFrame({"elo": rating})
-            .join(pd.Series(peak, name="peak"))
-            .sort_values("elo", ascending=False))
-    return df
+    #df = (pd.DataFrame({"elo": rating})
+    #        .join(pd.Series(peak, name="peak"))
+    #        .sort_values("elo", ascending=False))
+    
+    final_df = (
+        pd.DataFrame({"elo": rating})
+        .join(pd.Series(peak, name="peak"))
+        .sort_values("elo", ascending=False)
+    )
+    if return_history:
+        hist_df = pd.DataFrame(history).set_index("score_id")
+        return final_df, hist_df
+    
+    return final_df
+    #return df

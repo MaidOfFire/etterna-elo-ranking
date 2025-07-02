@@ -2,3 +2,4 @@ output/scores/*
 scripts/run_elo_history.py
 scripts/__pycache__
 .DS_Store
+scripts/test.ipynb
