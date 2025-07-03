@@ -24,6 +24,7 @@ OUT_CURR_CSV        = Path("output/elo_dtw_ord_skillsets.csv")
 OUT_CURR_MD         = Path("output/elo_dtw_ord_skillsets.md")
 OUT_PEAK_CSV        = Path("output/elo_dtw_ord_peak_skillsets.csv")
 OUT_PEAK_MD         = Path("output/elo_dtw_ord_peak_skillsets.md")
+OUT_HISTORY         = Path("output/elo_by_score.csv")
 
 # ──────────────────────────────
 def compute_tables_and_history(data: pd.DataFrame):
@@ -69,7 +70,7 @@ def main() -> None:
     peak_df.round(0).astype(int).to_csv(OUT_PEAK_CSV)
     peak_df.round(0).astype(int).to_markdown(OUT_PEAK_MD)
 
-    history_df.to_csv("output/elo_by_score.csv")
+    history_df.to_csv(OUT_HISTORY)
 
     print(f"Current ratings  → {OUT_CURR_CSV} / {OUT_CURR_MD}")
     print(f"Peak    ratings  → {OUT_PEAK_CSV} / {OUT_PEAK_MD}")

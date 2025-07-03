@@ -49,13 +49,13 @@ scores_with_rating = scores.merge(
 )
 
 # adjust Elo by pseudo-rate
-avg_chart_rate = (
-    scores_with_rating[["chart_id", "rate", "pseudo_rate", "elo_at_score"]]
+rating_df = (
+    scores_with_rating[["id","chart_id", "rate", "pseudo_rate", "elo_after_score"]]
     .sort_values("chart_id")
     .copy()
 )
-avg_chart_rate["adj_elo_at_score"] = (
-    avg_chart_rate["elo_at_score"] / avg_chart_rate["pseudo_rate"]
+rating_df["adj_elo_after_score"] = (
+    rating_df["elo_after_score"] / rating_df["pseudo_rate"]
 )
 
 # ──────────────────────────────
@@ -72,43 +72,36 @@ skill_cols = ["stream", "jumpstream", "handstream", "chordjacks", "technical"]
 
 scores_full["msd"] = scores_full[skill_cols].max(axis=1)
 
-cap = np.exp((WIFE_DIFF_SCALE / RATE_DIFF_SCALE) * (96.5 - 93)) # Msd doesn't scale linearly so this pseudo-rate approximation is very rough
-scores_full["pseudo_rate_msd"] = np.minimum(
-    scores_full["pseudo_rate"],
-    scores_full["rate"] * cap,
-)
+score_msd = scores_full.set_index("id").loc[rating_df["id"]]["msd"]
 
-# the approximation. we want to know 93% wife msds 
-chart_msd = (
-    scores_full.groupby("chart_id")
-    .apply(lambda df: (df["msd"] / df["pseudo_rate_msd"]).mean())
-    .loc[valid_chart_ids]
-)
+rating_df = rating_df.set_index("id")
+
+farm_potential = np.log(score_msd/rating_df["elo_after_score"])
+farm_potential -= (farm_potential).median()
+rating_df["overrated"] = farm_potential
+
 
 # readable chart name: (song, first-pack)
 chart_name = {
     cid: (
         scores_full.loc[scores_full["chart_id"] == cid, "song"].iloc[0]["name"],
-        scores_full.loc[scores_full["chart_id"] == cid, "song"].iloc[0]["packs"][0][
-            "name"
-        ],
+        scores_full.loc[scores_full["chart_id"] == cid, "song"].iloc[0]["packs"][0]["name"],
     )
     for cid in valid_chart_ids.astype(int)
 }
 
 # Elo diff
 chart_diff = (
-    avg_chart_rate.groupby("chart_id")["adj_elo_at_score"]
-    .agg(["mean"])
-    .rename(columns={"mean": "elo_diff"})
+    rating_df.groupby("chart_id")["adj_elo_after_score"]
+    .mean()
     .round(2)
+    .rename("elo_diff")
+    .to_frame()
 )
 
 # MSD-overrated metric
-farm_potential = chart_msd[chart_diff.index] / chart_diff["elo_diff"]
-farm_potential /= farm_potential.median()
+chart_diff["msd_overrated"] = np.exp(rating_df.groupby("chart_id")["overrated"].mean()).round(4)
 
-chart_diff["msd_overrated"] = farm_potential.round(4)
 chart_diff["skillset"] = chart_diff.index.map(chart_skillset)
 chart_diff["chart_name"] = chart_diff.index.map(chart_name)
 

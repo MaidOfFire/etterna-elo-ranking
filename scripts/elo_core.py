@@ -208,7 +208,7 @@ def run_elo(
         # batch-apply A's combined update once
         rating[pA] = RA0 + delta_A_sum
         peak[pA]   = max(peak[pA], rating[pA])
-        history.append(dict(score_id=id_A,player=pA,elo_at_score=rating[pA],datetime=row0.datetime_A,))
+        history.append(dict(score_id=id_A,player=pA,elo_after_score=rating[pA],delta_elo=delta_A_sum,datetime=row0.datetime_A,))
 
     #df = (pd.DataFrame({"elo": rating})
     #        .join(pd.Series(peak, name="peak"))
