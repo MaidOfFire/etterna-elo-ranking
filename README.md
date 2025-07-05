@@ -99,7 +99,7 @@ S_A = \sigma\!\bigl(\alpha \, x_1 + \beta \, x_2\bigr),
 \quad \sigma(z)=\frac{1}{1 + e^{-z}}
 ```
 
-where $\alpha$ and $\beta$ are tunable parameters, determining equivalence of different (rate, wife) pairs.
+where $\alpha$ and $\beta$ are tunable parameters, determining equivalence of different (rate, wife) pairs (see [this](/scripts/explore_params.ipynb)).
 
 ## Elo Update formula:
 
