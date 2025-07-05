@@ -22,8 +22,8 @@ OUTDIR.mkdir(parents=True, exist_ok=True)
 # ---------------------------------------------------------------------------
 # 1.  CONFIGURATION
 # ---------------------------------------------------------------------------
-START_RANK = 1         # inclusive, 1‑based
-END_RANK   = 270       # inclusive, 1‑based
+START_RANK = 300         # inclusive, 1‑based
+END_RANK   = 400       # inclusive, 1‑based
 assert 1 <= START_RANK <= END_RANK
 
 PARQUET_COMPRESSION = "zstd"   # "zstd", "snappy", "gzip", …

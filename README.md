@@ -9,63 +9,63 @@ The **Elo rating system** is a method for calculating the relative skill levels 
 Higher Elo indicates higher skill, and differences in ratings predict the outcome probabilities of matches between players.
 
 ## Rating Table
-_Last updated: May 21, 2025_
+_Last updated: Jul 5, 2025_
 
 |                  |   overall |   stream |   jumpstream |   handstream |   chordjacks |   technical |
 |:-----------------|----------:|---------:|-------------:|-------------:|-------------:|------------:|
-| Saragi           |      2484 |     2544 |         2437 |         2440 |         2467 |        2035 |
-| puyihari         |      2396 |     2485 |         2314 |         2389 |         2264 |        2129 |
-| YumaOs           |      2297 |     2293 |         2313 |         2287 |         2001 |        1906 |
-| AnMaO            |      2258 |     2363 |         2219 |         2191 |         1773 |        2084 |
-| jja              |      2252 |     2258 |         2278 |         2219 |         2023 |        2032 |
-| maya             |      2245 |     2354 |         2128 |         2253 |         1948 |        2068 |
-| gongorirel       |      2226 |     2125 |         2280 |         2274 |         1521 |        1710 |
-| marilyy          |      2174 |     2286 |         2011 |         2066 |         1566 |        2169 |
-| selrrrrr         |      2168 |     1886 |         2283 |         2210 |         2010 |        1926 |
-| Devplayzz        |      2153 |     2155 |         2136 |         1962 |         1564 |        2168 |
-| clerpy           |      2128 |     2187 |         2128 |         2070 |         2000 |        2039 |
-| SillyFangirl     |      2119 |     2020 |         2175 |         2113 |         2063 |        2068 |
-| paocompaoepaa    |      2080 |     2240 |         1748 |         2063 |         1612 |        1937 |
-| waterquality     |      2044 |     1924 |         2153 |         2056 |         1770 |        1923 |
-| na2304           |      2034 |     2027 |         1640 |         1876 |         2104 |        1971 |
-| almond           |      2030 |     2127 |         1931 |         2030 |         1730 |        1802 |
-| Bistulex         |      2025 |     2084 |         1982 |         2009 |         1835 |        1864 |
-| Nico777playz     |      2004 |     1978 |         1973 |         1861 |         2060 |        1912 |
-| Abyss            |      2002 |     1885 |         2095 |         2027 |         1698 |        1664 |
-| Kyuui            |      1994 |     1934 |         1929 |         1654 |         2049 |        1999 |
-| vibong           |      1974 |     1973 |         1883 |         1779 |         2065 |        1793 |
-| COmp             |      1973 |     1966 |         2066 |         1886 |         1764 |        1743 |
-| muelsyse         |      1966 |     1861 |         2119 |         1917 |         1836 |        1828 |
-| DanTDM           |      1961 |     2009 |         1799 |         1885 |         1843 |        1988 |
-| 23Marzo          |      1961 |     1946 |         1991 |         1945 |         1619 |        1650 |
-| Delusion         |      1952 |     1918 |         1915 |         2022 |         1662 |        1834 |
-| Kuruche          |      1949 |     2062 |         1929 |         1856 |         1619 |        1803 |
-| Noraa            |      1945 |     1909 |         2058 |         1803 |         1805 |        1870 |
-| skadi            |      1933 |     1909 |         1943 |         1948 |         1867 |        1754 |
-| TristanJacob9    |      1931 |     1947 |         1744 |         1828 |         1904 |        1941 |
-| googlekub455     |      1931 |     2070 |         1871 |         1639 |         1607 |        1851 |
-| vaydex           |      1918 |     1440 |         1872 |         1656 |         2226 |        1505 |
-| Voezux           |      1916 |     2066 |         1772 |         1910 |         1665 |        1584 |
-| DeltaEquals84    |      1911 |     2099 |         1704 |         1770 |         1416 |        1864 |
-| Meatloaf         |      1909 |     2123 |         1786 |         1817 |         1485 |        1706 |
-| snoverpk         |      1899 |     1920 |         1910 |         1863 |         1665 |        1866 |
-| Trescendence     |      1897 |     1880 |         1873 |         1796 |         1826 |        1936 |
-| malicieux        |      1894 |     1844 |         1864 |         1974 |         1591 |        1670 |
-| SOYNEBUV2        |      1884 |     1869 |         1810 |         1973 |         1704 |        1614 |
-| yumaTV           |      1883 |     1882 |         1987 |         1760 |         1780 |        1668 |
-| Dystire          |      1882 |     1946 |         1773 |         1841 |         1514 |        1861 |
-| Guilherme        |      1880 |     1751 |         1582 |         1795 |         1953 |        1893 |
-| Monheim          |      1874 |     1621 |         1693 |         1738 |         2145 |        1739 |
-| hsod             |      1873 |     1645 |         1958 |         1869 |         1792 |        1768 |
-| Vanstav          |      1856 |     2216 |         1583 |         1535 |         1547 |        1769 |
-| Shadow           |      1854 |     1965 |         1749 |         1701 |         1599 |        1848 |
-| breadles         |      1850 |     1861 |         1516 |         1652 |         1860 |        1830 |
-| theman234tonk    |      1847 |     1857 |         1885 |         1790 |         1561 |        1799 |
-| p6yb             |      1847 |     1793 |         2045 |         1545 |         1703 |        1627 |
-| Tevelkin         |      1845 |     1714 |         1826 |         1798 |         1484 |        1911 |
-| Wateh            |      1845 |     1825 |         1719 |         1881 |         1595 |        1829 |
+| Saragi           |      2564 |     2658 |         2530 |         2505 |         2495 |        2086 |
+| puyihari         |      2486 |     2584 |         2407 |         2468 |         2317 |        2164 |
+| YumaOs           |      2410 |     2391 |         2438 |         2403 |         2102 |        1959 |
+| AnMaO            |      2363 |     2479 |         2340 |         2270 |         1877 |        2138 |
+| waterquality     |      2342 |     2408 |         2339 |         2280 |         2090 |        1711 |
+| jja              |      2339 |     2367 |         2360 |         2290 |         2094 |        2048 |
+| maya             |      2326 |     2481 |         2187 |         2309 |         2011 |        2092 |
+| marilyy          |      2254 |     2375 |         2145 |         2132 |         1603 |        2241 |
+| gongorirel       |      2241 |     2036 |         2351 |         2335 |         1616 |        1748 |
+| selrrrrr         |      2239 |     2050 |         2361 |         2289 |         2068 |        1993 |
+| Devplayzz        |      2226 |     2214 |         2228 |         2001 |         1568 |        2236 |
+| SillyFangirl     |      2159 |     2012 |         2259 |         1923 |         2114 |        2105 |
+| Nico777playz     |      2151 |     2092 |         2198 |         1920 |         2161 |        2043 |
+| paocompaoepaa    |      2148 |     2315 |         1797 |         2150 |         1712 |        1979 |
+| clerpy           |      2138 |     2099 |         2195 |         2120 |         2057 |        2085 |
+| Kuruche          |      2109 |     2308 |         2096 |         1923 |         1667 |        1783 |
+| Bistulex         |      2108 |     2172 |         2079 |         2072 |         1903 |        1796 |
+| na2304           |      2097 |     2095 |         1662 |         1925 |         2182 |        2016 |
+| Arcine           |      2097 |     2093 |         2102 |         2095 |         1896 |        1995 |
+| Abyss            |      2090 |     1972 |         2179 |         2119 |         1774 |        1742 |
+| almond           |      2078 |     2205 |         1996 |         2033 |         1789 |        1874 |
+| 23Marzo          |      2074 |     2170 |         2020 |         2033 |         1784 |        1899 |
+| Meatloaf         |      2072 |     2034 |         2078 |         2102 |         1488 |        1854 |
+| muelsyse         |      2064 |     2049 |         2111 |         2031 |         1826 |        1827 |
+| Kyuui            |      2063 |     2022 |         2029 |         1674 |         2108 |        2052 |
+| yeb              |      2055 |     2271 |         1936 |         1956 |         1837 |        1715 |
+| Noraa            |      2048 |     1977 |         2190 |         1918 |         1898 |        1976 |
+| vibong           |      2044 |     1989 |         1988 |         2042 |         2101 |        1881 |
+| bunny            |      2044 |     2163 |         2063 |         1904 |         1588 |        1817 |
+| DanTDM           |      2042 |     2088 |         2066 |         1899 |         1858 |        1972 |
+| COmp             |      2037 |     2125 |         2022 |         1964 |         1788 |        1875 |
+| Delusion         |      2036 |     2024 |         1977 |         2105 |         1705 |        1905 |
+| skadi            |      2030 |     1999 |         2053 |         2038 |         1946 |        1793 |
+| SOYNEBUV2        |      2024 |     2178 |         1857 |         2036 |         1781 |        1727 |
+| snoverpk         |      2006 |     2009 |         2044 |         1964 |         1771 |        1961 |
+| malicieux        |      2001 |     1916 |         2010 |         2077 |         1710 |        1726 |
+| vaydex           |      1995 |     1556 |         2002 |         1785 |         2199 |        1596 |
+| Voezux           |      1995 |     2106 |         1880 |         1999 |         1737 |        1634 |
+| googlekub455     |      1993 |     2141 |         1922 |         1673 |         1632 |        1915 |
+| Tanmanguy7       |      1991 |     1944 |         2092 |         1753 |         1883 |        1937 |
+| TristanJacob9    |      1986 |     2002 |         1719 |         1906 |         1972 |        1983 |
+| Trescendence     |      1979 |     1970 |         1998 |         1878 |         1914 |        1969 |
+| hsod             |      1977 |     1783 |         2068 |         1981 |         1883 |        1848 |
+| yumaTV           |      1975 |     1950 |         2099 |         1795 |         1875 |        1756 |
+| satori           |      1957 |     2236 |            0 |         1823 |         1729 |        1813 |
+| theman234tonk    |      1957 |     1998 |         1984 |         1888 |         1636 |        1888 |
+| Monheim          |      1951 |     1753 |         1837 |         1818 |         2197 |        1799 |
+| Thiago           |      1949 |     1924 |         1966 |         1957 |         1819 |        1744 |
+| sim0             |      1948 |     1903 |         2038 |         1836 |         1685 |        1905 |
+| Dystire          |      1948 |     2045 |         1886 |         1888 |         1512 |        1912 |
+| Shadow           |      1939 |     2066 |         1851 |         1787 |         1707 |        1899 |
 
-Full table (271 player) [here](/output/elo_dtw_ord_skillsets.md). Peak rating table [here](/output/elo_dtw_ord_peak_skillsets.md). 
+Full table (400 players) [here](/output/elo_dtw_ord_skillsets.md). Peak rating table [here](/output/elo_dtw_ord_peak_skillsets.md). 
 
 Note that because the player pool was much smaller in earlier years, Elo inflation occurs quickly.
 Ratings achieved in different eras are therefore generally not comparable.
@@ -74,7 +74,7 @@ Ratings achieved in different eras are therefore generally not comparable.
 
 ## How matches are constructed:
 
-Player scores are filtered leaving only scores with accuracy between **96% and 99.7%**.
+Player scores are filtered leaving only scores with accuracy between **89.0% and 99.0%**.
 
 For each chart and skillset (e.g., `stream`, `jumpstream`, `handstream` (defined as largest MSD)), player scores are matched as follows:
 
@@ -166,32 +166,31 @@ In addition to player ratings, the pipeline also assigns each chart a difficulty
 
 Sample of chart difficulty table:
 
-|   chart_id |   elo_diff |   msd_overrated | skillset   | chart_name                                                                                                                                                                                                                                                                                  |
-|-----------:|-----------:|----------------:|:-----------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|     315220 |    2087.82 |          0.7743 | technical  | ('TRICKL4SH 220', 'TESTOPACK')                                                                                                                                                                                                                                                              |
-|     315268 |    2074.09 |          0.9415 | technical  | ('Death Waltz', 'TESTOPACK')                                                                                                                                                                                                                                                                |
-|     256591 |    2035.12 |          0.5713 | technical  | ('attang', "Bunch of Files You Probably Don't Have 4")                                                                                                                                                                                                                                      |
-|     270333 |    1934    |          0.8718 | technical  | ('Cyber Induction', 'Grape Cola 2')                                                                                                                                                                                                                                                         |
-|     254283 |    1891.65 |          0.8652 | technical  | ('DATA DRAIN', 'Blurk')                                                                                                                                                                                                                                                                     |
-|     342852 |    1873.76 |          0.9033 | technical  | ('Grilletto', 'interesting files i found in my discord dms')                                                                                                                                                                                                                                |
-|     285259 |    1850.71 |          0.8553 | technical  | ('The Marriage of Figaro', 'Minty zFarts Pack 1')                                                                                                                                                                                                                                           |
-|     315246 |    1817.07 |          0.8838 | technical  | ('Gamble', 'TESTOPACK')                                                                                                                                                                                                                                                                     |
-|     282124 |    1811.04 |          0.9312 | technical  | ('[Penultimate] Faint', 'Lofty Dump Minipack 3 (Xclusive Edition)')                                                                                                                                                                                                                         |
-|     271686 |    1807.79 |          0.9127 | technical  | ('Shotgun Senorita (Zardonic Remix)', 'hi19hi19 Pack 5 - Streams and Memes')                                                                                                                                                                                                                |
-|     250488 |    1807.33 |          0.8803 | technical  | ('Tape Worm', 'Anime Sucks Ass  3')                                                                                                                                                                                                                                                         |
-|     327874 |    1803.86 |          0.8347 | technical  | ('Nostos 2022', "Vela's Velato v2 - Escape From Reality")                                                                                                                                                                                                                                   |
-|     285731 |    1794.65 |          0.5457 | technical  | ('Distorted Reality', 'Mina Minimegapack 4')                                                                                                                                                                                                                                                |
-|     256429 |    1779.93 |          0.5813 | technical  | ('DASTER', "Bunch of Files You Probably Don't Have 5 -OLD SCHOOL EDITION-")                                                                                                                                                                                                                 |
-|     285719 |    1777.68 |          0.9301 | technical  | ('Push it to the Limit v2', 'Mina Minimegapack 4')                                                                                                                                                                                                                                          |
-|     251954 |    1773.31 |          0.9372 | technical  | ('FREEDOM DIVE - GAMMA DIMENSION-', "ATTang's Bad Files")                                                                                                                                                                                                                                   |
-|     338700 |    1766.24 |          1.0169 | technical  | ("Can't Let Go", 'Polarin Pack 5')                                                                                                                                                                                                                                                          |
-|     285261 |    1756.51 |          0.8357 | technical  | ('Doge Adventure', 'Minty zFarts Pack 1')                                                                                                                                                                                                                                                   |
-|     315289 |    1754.95 |          0.9078 | technical  | ('Dekoboko speedster', 'TESTOPACK')                                                                                                                                                                                                                                                         |
-|     251921 |    1745.8  |          0.8889 | technical  | ('Palette GAMMA', 'ATTangs Dumpmix')                                                                                                                                                                                                                                                        |
-|     285513 |    1728.48 |          0.8282 | technical  | ('Juju on that Beat', 'Minty Fresh Pack 1')                                                                                                                                                                                                                                                 |
-|     304692 |    1716.88 |          0.8404 | technical  | ("Cloud Nimbus' Op", 'Shadormix')                                                                                                                                                                                                                                                           |
-|     302129 |    1713.63 |          0.5736 | technical  | ('Arch0wl', 'Rebound Vibrajacking Pack')                                                                                                                                                                                                                                                    |
-
-Full table (4862 chart) [here](/output/chart_elo_diff.md).
+|   chart_id |   elo_diff |   msd_overrated | skillset   | chart_name                                                                                                                                                                                                                                                                                                                                             |
+|-----------:|-----------:|----------------:|:-----------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|     315220 |    2177.01 |          0.7606 | technical  | ('TRICKL4SH 220', 'TESTOPACK')                                                                                                                                                                                                                                                                                                                         |
+|     315268 |    2103.99 |          0.9518 | technical  | ('Death Waltz', 'TESTOPACK')                                                                                                                                                                                                                                                                                                                           |
+|     256591 |    2007.84 |          0.5957 | technical  | ('attang', "Bunch of Files You Probably Don't Have 4")                                                                                                                                                                                                                                                                                                 |
+|     270333 |    1950.85 |          0.8843 | technical  | ('Cyber Induction', 'Grape Cola 2')                                                                                                                                                                                                                                                                                                                    |
+|     254283 |    1917.62 |          0.8719 | technical  | ('DATA DRAIN', 'Blurk')                                                                                                                                                                                                                                                                                                                                |
+|     342852 |    1911.99 |          0.9047 | technical  | ('Grilletto', 'interesting files i found in my discord dms')                                                                                                                                                                                                                                                                                           |
+|     342595 |    1906.77 |          0.9026 | technical  | ('[F-BOSS] Long Tall Eyelash (Ken Ishii Mix)', 'Etterna Echelon Pack')                                                                                                                                                                                                                                                                                 |
+|     272862 |    1904.35 |          0.7505 | technical  | ('Ghost House', 'Hard Songs Megapack Volume 3')                                                                                                                                                                                                                                                                                                        |
+|     271686 |    1872.93 |          0.9033 | technical  | ('Shotgun Senorita (Zardonic Remix)', 'hi19hi19 Pack 5 - Streams and Memes')                                                                                                                                                                                                                                                                           |
+|     282124 |    1864.97 |          0.9215 | technical  | ('[Penultimate] Faint', 'Lofty Dump Minipack 3 (Xclusive Edition)')                                                                                                                                                                                                                                                                                    |
+|     285259 |    1859.45 |          0.8708 | technical  | ('The Marriage of Figaro', 'Minty zFarts Pack 1')                                                                                                                                                                                                                                                                                                      |
+|     250488 |    1859.22 |          0.8734 | technical  | ('Tape Worm', 'Anime Sucks Ass  3')                                                                                                                                                                                                                                                                                                                    |
+|     285731 |    1856.6  |          0.5381 | technical  | ('Distorted Reality', 'Mina Minimegapack 4')                                                                                                                                                                                                                                                                                                           |
+|     285719 |    1851.92 |          0.9078 | technical  | ('Push it to the Limit v2', 'Mina Minimegapack 4')                                                                                                                                                                                                                                                                                                     |
+|     327874 |    1841.14 |          0.8353 | technical  | ('Nostos 2022', "Vela's Velato v2 - Escape From Reality")                                                                                                                                                                                                                                                                                              |
+|     251954 |    1830.08 |          0.9212 | technical  | ('FREEDOM DIVE - GAMMA DIMENSION-', "ATTang's Bad Files")                                                                                                                                                                                                                                                                                              |
+|     315246 |    1827.68 |          0.8993 | technical  | ('Gamble', 'TESTOPACK')                                                                                                                                                                                                                                                                                                                                |
+|     285261 |    1826.7  |          0.8272 | technical  | ('Doge Adventure', 'Minty zFarts Pack 1')                                                                                                                                                                                                                                                                                                              |
+|     251921 |    1810.36 |          0.8768 | technical  | ('Palette GAMMA', 'ATTangs Dumpmix')                                                                                                                                                                                                                                                                                                                   |
+|     338700 |    1801.15 |          1.0243 | technical  | ("Can't Let Go", 'Polarin Pack 5')                                                                                                                                                                                                                                                                                                                     |
+|     285513 |    1769.74 |          0.8297 | technical  | ('Juju on that Beat', 'Minty Fresh Pack 1')                                                                                                                                                                                                                                                                                                            |
+|     289024 |    1755.73 |          0.7515 | technical  | ('ge4ce vFUR v2', 'ODIPack3')                                                                                                                                                                                                                                                                                                                          |
+|     339343 |    1754.45 |          0.8645 | technical  | ('[[Big Mac]] Big Mac Rush', 'Grape Cola 3')                                                                                                                                                                                                                                                             
+Full table (5307 charts) [here](/output/chart_elo_diff.md).
 
 

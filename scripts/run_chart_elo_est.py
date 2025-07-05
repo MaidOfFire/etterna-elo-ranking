@@ -12,7 +12,8 @@ from elo_core import load_scores, RATE_DIFF_SCALE, WIFE_DIFF_SCALE
 # ──────────────────────────────
 # CONFIG
 # ──────────────────────────────
-PLAYCOUNT_THRESHOLD = 15
+CHART_PLAYCOUNT_THRESHOLD = 15
+PLAYER_PLAYCOUNT_THRESHOLD = 15
 
 SCORES_DIR = Path("output/scores")
 HISTORY_CSV = Path("output/elo_by_score.csv")
@@ -23,6 +24,7 @@ OUT_MD = Path("output/chart_elo_diff.md")
 # LOAD & PREPARE SCORE DATA
 # ──────────────────────────────
 scores_full = load_scores(SCORES_DIR)
+scores_full = scores_full[~scores_full["id"].duplicated()]
 
 scores_full["pseudo_rate"] = (
     scores_full["rate"]
@@ -31,22 +33,36 @@ scores_full["pseudo_rate"] = (
 
 scores = scores_full[["id", "chart_id", "rate", "wife", "pseudo_rate"]].copy()
 
-# keep only charts with enough plays
-play_counts = scores.groupby("chart_id")["id"].count()
-valid_chart_ids = play_counts[play_counts > PLAYCOUNT_THRESHOLD].index
-scores = scores[scores["chart_id"].isin(valid_chart_ids)]
+history = pd.read_csv(HISTORY_CSV)         
 
-# ──────────────────────────────
-# MERGE IN ELO HISTORY
-# ──────────────────────────────
-history = pd.read_csv(HISTORY_CSV)  
-
+history['score_number'] = (history
+    .sort_values(['player', 'skillset', 'datetime'])  
+    .groupby(['player', 'skillset'])
+    .cumcount()                                       
+    .add(1)                                            
+    .sort_index()                                      
+)
 scores_with_rating = scores.merge(
     history,
     left_on="id",
     right_on="score_id",
-    how="inner", 
+    how="inner"       
 )
+
+valid_scores = scores_with_rating[scores_with_rating["score_number"]>PLAYER_PLAYCOUNT_THRESHOLD].id.to_numpy()
+scores = scores[scores.id.isin(valid_scores)]
+scores_full = scores_full[scores_full.id.isin(valid_scores)]
+
+
+# keep only charts with enough plays
+play_counts = scores.groupby("chart_id")["id"].count()
+valid_chart_ids = play_counts[play_counts > CHART_PLAYCOUNT_THRESHOLD].index
+
+
+scores = scores[scores["chart_id"].isin(valid_chart_ids)]
+scores_full = scores_full[scores_full["chart_id"].isin(valid_chart_ids)]
+
+scores_with_rating = scores_with_rating[scores_with_rating.id.isin(scores.id)]
 
 # adjust Elo by pseudo-rate
 rating_df = (

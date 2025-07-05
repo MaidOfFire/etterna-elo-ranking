@@ -20,8 +20,8 @@ from elo_core import (
 # ──────────────────────────────
 SCORES_DIR = Path("output/scores")
 
-K_GRID   = [10]
-TAU_GRID = [365*4,365*5,np.inf]
+K_GRID   = [7,8,9,10]
+TAU_GRID = [365*4]
 RATE_DIFF_SCALE_GRID = [100]
 WIFE_DIFF_SCALE_GRID = [1.5]
 

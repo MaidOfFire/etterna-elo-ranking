@@ -23,7 +23,7 @@ from typing import List, Tuple, Union
 # CONSTANTS (edit here → everywhere)
 # ──────────────────────────────
 RATING_INIT: float  = 1500.0
-K_FACTOR: float     = 10.0
+K_FACTOR: float     = 8.0
 TOLERANCE: float    = 1e-3
 TAU_GAP_DAYS: float = 4*365   # np.inf → no time decay
 
