@@ -5,7 +5,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-
+from sklearn.linear_model import LinearRegression
 from elo_core import load_scores, RATE_DIFF_SCALE, WIFE_DIFF_SCALE
 
 
@@ -90,11 +90,23 @@ scores_full["msd"] = scores_full[skill_cols].max(axis=1)
 
 score_msd = scores_full.set_index("id").loc[rating_df["id"]]["msd"]
 
+score_skillset = scores_full.set_index("id")["skillset"][rating_df["id"]]
+
 rating_df = rating_df.set_index("id")
 
-farm_potential = np.log(score_msd/rating_df["elo_after_score"])
-farm_potential -= (farm_potential).median()
-rating_df["overrated"] = farm_potential
+rating_df["expected_msd"] = np.nan
+
+for i in skill_cols:
+    reg = LinearRegression().fit(rating_df["elo_after_score"][score_skillset == i].to_numpy()[:,None], 
+                                score_msd[score_skillset == i].to_numpy()[:,None])
+    score_msd_pred = reg.predict(rating_df["elo_after_score"][score_skillset == i].to_numpy()[:,None])
+    
+    rating_df.loc[score_skillset == i,"expected_msd"] = score_msd_pred
+
+overrated = np.log(score_msd/rating_df["expected_msd"])
+
+
+rating_df["overrated"] = overrated
 
 
 # readable chart name: (song, first-pack)
@@ -124,7 +136,7 @@ chart_diff["chart_name"] = chart_diff.index.map(chart_name)
 # ──────────────────────────────
 # OUTPUT
 # ──────────────────────────────
-chart_diff = chart_diff.sort_values(["skillset", "elo_diff"],ascending=False)
+chart_diff = chart_diff.sort_values(["msd_overrated"],ascending=False)
 chart_diff.to_csv(OUT_CSV)
 chart_diff.to_markdown(OUT_MD)
 
