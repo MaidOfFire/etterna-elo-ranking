@@ -136,7 +136,7 @@ chart_diff["chart_name"] = chart_diff.index.map(chart_name)
 # ──────────────────────────────
 # OUTPUT
 # ──────────────────────────────
-chart_diff = chart_diff.sort_values(["msd_overrated"],ascending=False)
+chart_diff = chart_diff.sort_values(["skillset","msd_overrated"],ascending=False)
 chart_diff.to_csv(OUT_CSV)
 chart_diff.to_markdown(OUT_MD)
 
