@@ -33,8 +33,8 @@ def compute_tables_and_history(data: pd.DataFrame):
     for sk in SKILLSETS:
         matches = build_matches_for_skillset(data, sk)
         print(f"Found {len(matches)} matches for skillset '{sk}'")
-
-        final_df, hist_df = run_elo(matches, return_history=True)
+        
+        final_df, hist_df = run_elo(matches, skillset=sk, return_history=True)
         hist_df["skillset"] = sk        # tag for later merging
         hist_frames.append(hist_df)
 

@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
-from elo_core import load_scores, RATE_DIFF_SCALE, WIFE_DIFF_SCALE, WIFE_LINERIZER
+from elo_core import load_scores, RATE_DIFF_SCALE, WIFE_DIFF_SCALE, WIFE_LINERIZER, WIFE_DENOM
 
 # -----------------------------------------------------------
 # helper: nonlinear WIFE transform g(w)
@@ -14,8 +14,34 @@ from elo_core import load_scores, RATE_DIFF_SCALE, WIFE_DIFF_SCALE, WIFE_LINERIZ
 def g_wife(
     w: np.ndarray | float,
     *,
+    theta: np.ndarray | float,
+    denom: np.ndarray | float,
+    anchor_lo: float = 90.0,
+    anchor_hi: float = 93.0,
+    target: float = 3.0,
+):
+    """
+    Non-linear WIFE transform used in outcome_dynamic, but vectorised:
+    theta and denom may be scalars *or* arrays aligned with `w`.
+    """
+    w     = np.asarray(w,     dtype=float)
+    theta = np.asarray(theta, dtype=float)
+    denom = np.asarray(denom, dtype=float)
+
+    p = np.clip(w / denom, 1e-6, 1 - 1e-6)
+    h = (-np.log1p(-p)) ** theta
+
+    # scale each row so that g(93)-g(90) == target under *its* params
+    h_lo = (-np.log1p(-(anchor_lo / denom))) ** theta
+    h_hi = (-np.log1p(-(anchor_hi / denom))) ** theta
+    c    = target / (h_hi - h_lo)
+    return c * h
+
+def g_wife1(
+    w: np.ndarray | float,
+    *,
     theta: float = WIFE_LINERIZER,
-    denom: float = 130.0,
+    denom: float = WIFE_DENOM,
     anchor_lo: float = 90.0,
     anchor_hi: float = 93.0,
     target: float = 3.0,
@@ -50,6 +76,15 @@ OUT_MD = Path("output/chart_elo_diff.md")
 scores_full = load_scores(SCORES_DIR)
 scores_full = scores_full[~scores_full["id"].duplicated()]
 
+param_cols = {
+    "alpha": RATE_DIFF_SCALE,
+    "beta":  WIFE_DIFF_SCALE,
+    "theta": WIFE_LINERIZER,
+    "denom": WIFE_DENOM,
+}
+for col, mapping in param_cols.items():
+    scores_full[col] = scores_full["skillset"].map(mapping)
+
 #scores_full["pseudo_rate"] = (
 #    scores_full["rate"]
 #    * np.exp((WIFE_DIFF_SCALE / RATE_DIFF_SCALE) * (scores_full["wife"] - 93)) #Based on the outcome formula
@@ -58,11 +93,23 @@ scores_full = scores_full[~scores_full["id"].duplicated()]
 # new pseudo_rate: rate adjusted to equivalent 93 % WIFE
 # -----------------------------------------------------------
 
-scores_full["pseudo_rate"] = (
-    scores_full["rate"]
-    * np.exp((WIFE_DIFF_SCALE / RATE_DIFF_SCALE)
-             * (g_wife(scores_full["wife"]) - g_wife(93.0)))
-)
+
+
+scores_full["pseudo_rate"] = np.exp(
+    (scores_full["beta"] / scores_full["alpha"])
+    * (
+        g_wife(
+            scores_full["wife"].to_numpy(),
+            theta=scores_full["theta"].to_numpy(),
+            denom=scores_full["denom"].to_numpy(),
+        )
+        - g_wife(
+            93.0,
+            theta=scores_full["theta"].to_numpy(),
+            denom=scores_full["denom"].to_numpy(),
+        )
+    )
+) * scores_full["rate"]
 
 
 scores = scores_full[["id", "chart_id", "rate", "wife", "pseudo_rate"]].copy()

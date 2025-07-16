@@ -27,9 +27,38 @@ K_FACTOR: float     = 8.0
 TOLERANCE: float    = 1e-3
 TAU_GAP_DAYS: float = 4*365   # np.inf → no time decay
 
-WIFE_DIFF_SCALE = 1.25
-RATE_DIFF_SCALE = 110.0
-WIFE_LINERIZER = 3.5
+RATE_DIFF_SCALE = {
+    "stream":      100.0,
+    "jumpstream":  100.0,
+    "handstream":  100.0,
+    "chordjacks":  100.0,
+    "technical":   100.0,
+}
+WIFE_DIFF_SCALE = {
+    "stream":      0.75,
+    "jumpstream":  0.65,
+    "handstream":  0.7,
+    "chordjacks":  0.6,
+    "technical":   1.0,
+}
+WIFE_LINERIZER = {
+    "stream":      6.5,
+    "jumpstream":  6.0,
+    "handstream":  5.5,
+    "chordjacks":  5.5,
+    "technical":   6.5,
+}
+WIFE_DENOM = {
+    "stream":      110.0,
+    "jumpstream":  110.0,
+    "handstream":  110.0,
+    "chordjacks":  110.0,
+    "technical":   110.0,
+}
+#WIFE_DIFF_SCALE = 0.8
+#RATE_DIFF_SCALE = 100.0
+#WIFE_LINERIZER = 5.5
+#WIFE_DENOM = 110.0
 
 WIFE_RANGE: Tuple[float,float] = (82.0, 99.0)
 
@@ -113,35 +142,14 @@ def build_matches_for_skillset(df: pd.DataFrame, sk: str) -> pd.DataFrame:
 # Core Elo helpers
 # ──────────────────────────────
 
-def outcome_dynamic1(
-    rA: float, rB: float,
-    wA: float, wB: float,
-    alpha: float = RATE_DIFF_SCALE,     # weight for log(rate ratio)
-    beta:  float = WIFE_DIFF_SCALE      # weight for WIFE diff
-) -> float:
-    """
-    Return a value in (0,1) giving the probability‐like ‘score’ for player A.
-
-        z = alpha * log(rate_A / rate_B) + beta * (wife_A - wife_B)
-        S_A = 1 / (1 + exp(-z))
-
-    • Symmetric: swapping A/B makes z → –z →  S_A ↔ 1–S_A
-    • If rates and WIFEs equal → z = 0 → 0.5 (draw).
-    """
-    # avoid divide-by-zero: rate values are positive by construction
-    z = alpha * np.log(rA / rB) + beta * (wA - wB)
-
-    return 1.0 / (1.0 + np.exp(-z))
-
 def outcome_dynamic(
     rA: float, rB: float,
     wA: float, wB: float,
-    alpha: float = RATE_DIFF_SCALE,   
-    beta:  float = WIFE_DIFF_SCALE,   
-    theta: float = WIFE_LINERIZER,    
-    denom: float = 130.0,             
+    alpha:   float | None = None,
+    beta:    float | None = None,
+    theta:   float | None = None,
+    denom:   float | None = None,       
 ) -> float:
-
     # ------------ base transform (un-scaled) --------------
     def h(w: float) -> float:
         return (-np.log1p(-(w / denom))) ** theta    
@@ -172,6 +180,7 @@ def outcome_from_scores(rA: float, rB: float, wA: float, wB: float,
 def run_elo(
     matches: pd.DataFrame,
     *,
+    skillset: str,
     rating_init: float = RATING_INIT,
     k:          float  = K_FACTOR,
     tau_gap_days: float = TAU_GAP_DAYS,
@@ -217,7 +226,12 @@ def run_elo(
             k_eff = k if np.isinf(tau) else k * np.exp(-gap / tau)
 
             #sA = outcome_from_scores(rA, rB, wA, wB, tol)
-            sA = outcome_dynamic(rA, rB, wA, wB)
+
+            sA = outcome_dynamic(rA, rB, wA, wB,
+                                alpha = RATE_DIFF_SCALE [skillset],
+                                beta  = WIFE_DIFF_SCALE [skillset],
+                                theta = WIFE_LINERIZER [skillset],
+                                denom = WIFE_DENOM      [skillset],)
             sB = 1.0 - sA
             expA = 1.0 / (1.0 + 10.0 ** ((RB - RA0) / 400.0))
 
