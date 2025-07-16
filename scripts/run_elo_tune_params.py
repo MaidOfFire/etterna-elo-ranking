@@ -20,10 +20,11 @@ from elo_core import (
 # ──────────────────────────────
 SCORES_DIR = Path("output/scores")
 
-K_GRID   = [7,8,9,10]
+K_GRID   = [8]
 TAU_GRID = [365*4]
-RATE_DIFF_SCALE_GRID = [100]
-WIFE_DIFF_SCALE_GRID = [1.5]
+RATE_DIFF_SCALE_GRID = [110,]
+WIFE_DIFF_SCALE_GRID = [1.2,]
+WIFE_LINERIZER_GRID = [3.5]  
 
 
 FRAC            = 0.05
@@ -47,7 +48,8 @@ def evaluate_random_holdout(    matches:  pd.DataFrame,
     k:        float,
     tau_days: float,
     w_scale:  float,
-    r_scale:  float
+    r_scale:  float,
+    theta:    float, 
 ) -> tuple[np.ndarray, np.ndarray]:
     """
     Chronological simulation with batch update for id_A.
@@ -87,7 +89,7 @@ def evaluate_random_holdout(    matches:  pd.DataFrame,
             RB   = ratings[pB]
             expA = 1 / (1 + 10 ** ((RB - RA0) / 400))
             #sA   = outcome_from_scores(rA, rB, wA, wB, TOLERANCE)
-            sA   = outcome_dynamic(rA, rB, wA, wB, r_scale, w_scale)
+            sA   = outcome_dynamic(rA, rB, wA, wB, r_scale, w_scale, theta)
             sB   = 1 - sA
 
             if is_test:
@@ -109,21 +111,21 @@ def evaluate_random_holdout(    matches:  pd.DataFrame,
     return np.asarray(probs), np.asarray(outcomes)
 
 
-def score_params(match_cache, k, tau,w_scale, r_scale):
+def score_params(match_cache, k, tau,w_scale, r_scale, theta):
     rng = np.random.default_rng(RNG_SEED)
     tot_ll = tot_brier = tot_n = 0
 
     for sk, matches in match_cache.items():
         if matches.empty:
             continue
-        p, y = evaluate_random_holdout(matches, FRAC, rng, k, tau, w_scale, r_scale)
+        p, y = evaluate_random_holdout(matches, FRAC, rng, k, tau, w_scale, r_scale, theta)
         if y.size == 0:
             continue
 
         draws  = (y == 0.5)
         brier  = brier_score(y, p)
-        ce     = cross_entropy(y[~draws], p[~draws]) if (~draws).any() else np.nan
-        ll     = log_loss(np.round(y[~draws]), p[~draws]) if (~draws).any() else np.nan
+        ll     = cross_entropy(y[~draws], p[~draws]) if (~draws).any() else np.nan
+        #ll     = log_loss(np.round(y[~draws]), p[~draws]) if (~draws).any() else np.nan
         n      = y.size
 
         tot_n     += n
@@ -146,17 +148,21 @@ def main():
     # ---------------------------------------------------------------- #
 
     results = []
-    for k, tau, w_scale, r_scale in itertools.product(K_GRID, TAU_GRID, WIFE_DIFF_SCALE_GRID, RATE_DIFF_SCALE_GRID):
-        ll, br = score_params(match_cache, k, tau, w_scale, r_scale)
+    for k, tau, w_scale, r_scale, theta in itertools.product(K_GRID, TAU_GRID, WIFE_DIFF_SCALE_GRID, RATE_DIFF_SCALE_GRID, WIFE_LINERIZER_GRID):
+        ll, br = score_params(match_cache, k, tau, w_scale, r_scale, theta)
         tau_lbl = "inf" if np.isinf(tau) else int(tau)
-        results.append({"K": k, "tau": tau_lbl, "wife_scale": w_scale, "rate_scale": r_scale, "log_loss": ll, "brier": br})
-        print(f"K={k:>2}, τ={tau_lbl:>4}, w_s={w_scale}, r_s={r_scale} → log_loss={ll:.4f}  brier={br:.4f}")
+        results.append({"K": k, "tau": tau_lbl, "wife_scale": w_scale, "rate_scale": r_scale,"theta": theta,  "log_loss": ll, "brier": br})
+        
+        print(f"K={k:>2}, τ={tau_lbl:>4}, w_s={w_scale}, r_s={r_scale}, "
+          f"θ={theta:.2f} → log_loss={ll:.4f}  brier={br:.4f}")
 
     results.sort(key=lambda d: d["log_loss"])
     best = results[0]
     print("\n===== Best parameters (by log-loss) =====")
-    print(f"K = {best['K']}, τ = {best['tau']}, w_scale = {best['wife_scale']}, r_scale = {best['rate_scale']}  ⇒  "
-          f"log_loss = {best['log_loss']:.4f},  brier = {best['brier']:.4f}")
+    print(f"K = {best['K']}, τ = {best['tau']}, "
+      f"w_scale = {best['wife_scale']}, r_scale = {best['rate_scale']}, "
+      f"θ = {best['theta']}  ⇒  "
+      f"log_loss = {best['log_loss']:.4f},  brier = {best['brier']:.4f}")
 
 
 if __name__ == "__main__":

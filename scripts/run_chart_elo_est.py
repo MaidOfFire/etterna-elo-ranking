@@ -6,7 +6,31 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
-from elo_core import load_scores, RATE_DIFF_SCALE, WIFE_DIFF_SCALE
+from elo_core import load_scores, RATE_DIFF_SCALE, WIFE_DIFF_SCALE, WIFE_LINERIZER
+
+# -----------------------------------------------------------
+# helper: nonlinear WIFE transform g(w)
+# -----------------------------------------------------------
+def g_wife(
+    w: np.ndarray | float,
+    *,
+    theta: float = WIFE_LINERIZER,
+    denom: float = 130.0,
+    anchor_lo: float = 90.0,
+    anchor_hi: float = 93.0,
+    target: float = 3.0,
+):
+    """
+    Non-linear WIFE transform used in outcome_dynamic.
+    Scaled so that g(anchor_hi) − g(anchor_lo) = target.
+    """
+    p = np.clip(np.asarray(w) / denom, 1e-6, 1 - 1e-6)
+    h = (-np.log1p(-p)) ** theta           # base curve
+
+    h_lo = (-np.log1p(-(anchor_lo / denom))) ** theta
+    h_hi = (-np.log1p(-(anchor_hi / denom))) ** theta
+    c = target / (h_hi - h_lo)             # scale factor
+    return c * h
 
 
 # ──────────────────────────────
@@ -26,10 +50,20 @@ OUT_MD = Path("output/chart_elo_diff.md")
 scores_full = load_scores(SCORES_DIR)
 scores_full = scores_full[~scores_full["id"].duplicated()]
 
+#scores_full["pseudo_rate"] = (
+#    scores_full["rate"]
+#    * np.exp((WIFE_DIFF_SCALE / RATE_DIFF_SCALE) * (scores_full["wife"] - 93)) #Based on the outcome formula
+#)
+# -----------------------------------------------------------
+# new pseudo_rate: rate adjusted to equivalent 93 % WIFE
+# -----------------------------------------------------------
+
 scores_full["pseudo_rate"] = (
     scores_full["rate"]
-    * np.exp((WIFE_DIFF_SCALE / RATE_DIFF_SCALE) * (scores_full["wife"] - 93)) #Based on the outcome formula
+    * np.exp((WIFE_DIFF_SCALE / RATE_DIFF_SCALE)
+             * (g_wife(scores_full["wife"]) - g_wife(93.0)))
 )
+
 
 scores = scores_full[["id", "chart_id", "rate", "wife", "pseudo_rate"]].copy()
 
@@ -141,3 +175,14 @@ chart_diff.to_csv(OUT_CSV)
 chart_diff.to_markdown(OUT_MD)
 
 print(f"Wrote {OUT_CSV} / {OUT_MD}")
+
+#chart_id_score_ids = scores_full.groupby("chart_id").apply(lambda a: a["id"].to_numpy())
+chart_id_score_ids = (
+    scores_full[["chart_id", "id"]]           
+      .groupby("chart_id")["id"]               
+      .apply(np.array)                         
+)
+chart_id_song_id = scores_full.groupby("chart_id")["song"].first().apply(lambda a: a["id"])
+
+chart_id_score_ids.to_csv("output/chart_id_score_ids.csv")
+chart_id_song_id.to_csv("output/chart_id_song_id.csv")

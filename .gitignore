@@ -1,5 +1,11 @@
 output/scores/*
+output/replays/*
 scripts/run_elo_history.py
 scripts/__pycache__
 .DS_Store
 scripts/test.ipynb
+output/chart_id_score_ids.csv
+output/chart_id_score_ids.json
+output/chart_id_score_playernames.csv
+output/chart_id_score_rate.csv
+output/chart_id_song_id.csv

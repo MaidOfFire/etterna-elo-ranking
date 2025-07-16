@@ -27,10 +27,11 @@ K_FACTOR: float     = 8.0
 TOLERANCE: float    = 1e-3
 TAU_GAP_DAYS: float = 4*365   # np.inf → no time decay
 
-WIFE_DIFF_SCALE = 1.5
-RATE_DIFF_SCALE = 100.0
+WIFE_DIFF_SCALE = 1.25
+RATE_DIFF_SCALE = 110.0
+WIFE_LINERIZER = 3.5
 
-WIFE_RANGE: Tuple[float,float] = (89.0, 99.0)
+WIFE_RANGE: Tuple[float,float] = (82.0, 99.0)
 
 SKILLSETS: List[str] = [
     "stream", "jumpstream", "handstream",
@@ -112,7 +113,7 @@ def build_matches_for_skillset(df: pd.DataFrame, sk: str) -> pd.DataFrame:
 # Core Elo helpers
 # ──────────────────────────────
 
-def outcome_dynamic(
+def outcome_dynamic1(
     rA: float, rB: float,
     wA: float, wB: float,
     alpha: float = RATE_DIFF_SCALE,     # weight for log(rate ratio)
@@ -132,6 +133,28 @@ def outcome_dynamic(
 
     return 1.0 / (1.0 + np.exp(-z))
 
+def outcome_dynamic(
+    rA: float, rB: float,
+    wA: float, wB: float,
+    alpha: float = RATE_DIFF_SCALE,   
+    beta:  float = WIFE_DIFF_SCALE,   
+    theta: float = WIFE_LINERIZER,    
+    denom: float = 130.0,             
+) -> float:
+
+    # ------------ base transform (un-scaled) --------------
+    def h(w: float) -> float:
+        return (-np.log1p(-(w / denom))) ** theta    
+
+    def g(w: float) -> float:
+        c = 3 / (h(93) - h(90))
+        return c * h(w)
+
+    z = (
+        alpha * np.log(rA / rB)  
+        + beta  * (g(wA) - g(wB)) 
+    )
+    return 1.0 / (1.0 + np.exp(-z))
 
 def outcome_from_scores(rA: float, rB: float, wA: float, wB: float,
                         tol: float = TOLERANCE) -> float:
